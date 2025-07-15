@@ -1,24 +1,26 @@
 import { Component, OnInit } from '@angular/core';
-
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
+
 import { TableModule } from 'primeng/table';
 import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
-import { FormsModule } from '@angular/forms';
-import { CitaService } from '../../services/Cita.service';
 import { DatePickerModule } from 'primeng/datepicker';
 import { FloatLabelModule } from 'primeng/floatlabel';
-import { ConfirmationService, MessageService } from 'primeng/api';
 import { DialogModule } from 'primeng/dialog';
+
+import { CitaService } from '../../services/Cita.service';
+import { ConfirmationService, MessageService } from 'primeng/api';
 
 @Component({
   selector: 'app-atencion-cliente',
+  standalone: true,
   imports: [
+    CommonModule,
     FormsModule,
     TableModule,
     ButtonModule,
     InputTextModule,
-    CommonModule,
     DatePickerModule,
     FloatLabelModule,
     DialogModule,
@@ -28,78 +30,63 @@ import { DialogModule } from 'primeng/dialog';
 })
 export class AtencionCliente implements OnInit {
   citas: any[] = [];
-
-  newLista: any[] = [];
+  citasOriginales: any[] = [];
 
   filterValue: string = '';
   rangeDates: Date[] | undefined;
 
   dialog: boolean = false;
+  message: string = '';
 
   constructor(
     private _citaService: CitaService,
     private confirmationService: ConfirmationService,
     private messageService: MessageService
-  ) {
-    this.citas = _citaService.citas;
-  }
+  ) {}
 
   ngOnInit(): void {
-    /*
-    setInterval(() => {
-      window.location.reload();
-    }, 30000);
-    */
+    // Inicializa los datos
+    this.citasOriginales = this._citaService.citas;
+    this.citas = [...this.citasOriginales];
   }
 
-  // Filtrado y Ordenamiento
+  // Filtro por texto (nombre)
   applyFilter(): void {
-    if (this.filterValue != '') {
-      this.citas = this.citas.filter((e: { nombre: string }) =>
-        e.nombre.toLowerCase().includes(this.filterValue.toLocaleLowerCase())
-      );
-    } else {
-      this.citas = this._citaService.citas;
+    const filtro = this.filterValue.trim().toLowerCase();
+    this.citas = filtro
+      ? this.citasOriginales.filter((e) =>
+          e.nombre?.toLowerCase().includes(filtro)
+        )
+      : [...this.citasOriginales];
+  }
+
+  // Filtro por rango de fechas
+  filtroFechas(data: Date[]): void {
+    if (data?.[1]) {
+      this.citas = this.citasOriginales.filter((cita) => {
+        const fecha = new Date(cita.fecha);
+        return fecha >= data[0]! && fecha <= data[1]!;
+      });
+
+      this.message = `Se ejecutó la sentencia SQL para el filtro del rango de fechas:     
+        SELECT * FROM ATENCION_CLIENTE
+        WHERE fecha BETWEEN ${data[0]} AND ${data[1]};`;
+
+      this.dialog = true;
     }
   }
 
-  filtroFechas(data: any) {
-    if (data[1] != null) {
-      this.filtrarPorRangoDeFechas(data);
-      this.citas = this.listaFiltrada;
-    }
-  }
-
-  filtrarPorRangoDeFechas(data: any) {
-    //data[1] = data[1].setHours(23, 59, 59, 999);
-    this.filtro(data);
-  }
-
-  limpiar() {
-    this.citas = this._citaService.citas;
+  // Limpia filtros y búsqueda
+  limpiar(): void {
+    this.citas = [...this.citasOriginales];
     this.rangeDates = [];
-  }
-
-  listaFiltrada: any[] = [];
-  message: string = '';
-
-  filtro(data: any) {
-
-    this.listaFiltrada = this.citas.filter((cita) => {
-      const fecha = new Date(cita.fecha);
-      return fecha >= data[0]! && fecha <= data[1]!;
-    });
-
-    this.message = `Se ejecuto la sentencia sql para el filtro del rango de fechas:     
-          SELECT * FROM ATENCION_CLIENTE
-          WHERE fecha BETWEEN ${data[0]} AND ${data[1]}; 
-        `;
-    this.dialog = true;
+    this.filterValue = '';
   }
 
   hideDialog(): void {
     this.dialog = false;
   }
 
+  // Si deseas usar ordenamiento personalizado
   onSort(event: any): void {}
 }

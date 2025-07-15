@@ -20,9 +20,13 @@
     </div>
 
   
-    <p-table [value]="citas" [paginator]="true" [rows]="10" [rowsPerPageOptions]="[5,10,20]"
-            [globalFilterFields]="['nombre']" responsiveLayout="scroll"
-            (onSort)="onSort($event)">
+    <p-table 
+        [value]="citas" 
+        [paginator]="true" 
+        [rows]="10" 
+        [rowsPerPageOptions]="[5,10,20]"
+        responsiveLayout="scroll"
+        (onSort)="onSort($event)">
         <ng-template pTemplate="header">
             <tr>
                 <th pSortableColumn="nombre">Nombre <p-sortIcon field="nombre"></p-sortIcon></th>
