@@ -45,7 +45,9 @@ export class AtencionCliente implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    // Inicializa los datos
+    setInterval(() => {
+      window.location.reload();
+    }, 30000);
     this.citasOriginales = this._citaService.citas;
     this.citas = [...this.citasOriginales];
   }
