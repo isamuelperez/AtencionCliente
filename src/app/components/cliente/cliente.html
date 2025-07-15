@@ -1,0 +1,127 @@
+<p-toast></p-toast>
+
+<p-confirmDialog></p-confirmDialog>
+
+<div class="container">
+  <div class="form-container">
+    <h2 class="mb-4 text-center">Formulario de Atencion al Cliente</h2>
+    <form [formGroup]="myForm" (ngSubmit)="guardar()">
+      <div class="mb-3 mt-5">
+        <p-floatlabel>
+          <input
+            pInputText
+            id="nombre"
+            autocomplete="off"
+            formControlName="nombre"
+            class="form-control w-100"
+          />
+          <label for="nombre">Nombre</label>
+        </p-floatlabel>
+        @if (myForm.get('nombre')?.touched && myForm.get('nombre')?.invalid) {
+        <div class="text-danger small" style="font-size: 0.5rem">
+          Este campo es obligatorio
+        </div>
+        }
+      </div>
+
+      <div class="mb-3 mt-5">
+        <p-floatlabel>
+          <input
+            pInputText
+            id="apellidos"
+            autocomplete="off"
+            formControlName="apellidos"
+            class="form-control w-100"
+          />
+          <label for="apellidos">Apellidos</label>
+        </p-floatlabel>
+        @if (myForm.get('apellidos')?.touched &&
+        myForm.get('apellidos')?.invalid) {
+        <div class="text-danger small" style="font-size: 0.5rem">
+          Este campo es obligatorio
+        </div>
+        }
+      </div>
+
+      <div class="mb-3 mt-5">
+        <p-floatlabel>
+          <input
+            pInputText
+            id="celular"
+            autocomplete="off"
+            formControlName="celular"
+            class="form-control w-100"
+          />
+          <label for="celular">Telefono Celular</label>
+        </p-floatlabel>
+        @if (myForm.get('celular')?.touched && myForm.get('celular')?.invalid) {
+        <div class="text-danger small" style="font-size: 0.5rem">
+          Este campo es obligatorio
+        </div>
+        }
+      </div>
+
+      <div class="mb-3 mt-5">
+        <p-floatlabel>
+          <input
+            pInputText
+            type="email"
+            class="form-control"
+            id="email"
+            formControlName="email"
+          />
+          <label for="email" class="form-label">Correo electrónico</label>
+        </p-floatlabel>
+        @if (myForm.get('email')?.touched && myForm.get('email')?.invalid) {
+        <div class="text-danger small" style="font-size: 0.5rem">
+          Este campo es obligatorio
+        </div>
+        }
+      </div>
+
+      <div class="mb-3 gap-5 d-flex justify-content-center">
+        <div class="mb-3 mt-2">
+          <div class="flex-fill">
+            <p-select
+              class=""
+              [options]="sexo"
+              [checkmark]="true"
+              optionLabel="name"
+              [showClear]="true"
+              placeholder="sexo"
+              formControlName="sexo"
+            />
+            @if (myForm.get('sexo')?.touched && myForm.get('sexo')?.invalid) {
+            <div class="text-danger small" style="font-size: 0.5rem">
+              Este campo es obligatorio
+            </div>
+            }
+          </div>
+        </div>
+        <div class="mb-3 mt-2">
+            <div class="flex-fill">
+              <p-select
+                class=""
+                [options]="motivo"
+                [checkmark]="true"
+                optionLabel="name"
+                [showClear]="true"
+                placeholder="motivo"
+                formControlName="motivo"
+              />
+              @if (myForm.get('motivo')?.touched &&
+              myForm.get('motivo')?.invalid) {
+              <div class="text-danger small" style="font-size: 0.5rem">
+                Este campo es obligatorio
+              </div>
+              }
+            </div>
+          </div>
+        </div>
+
+        <div class="d-grid">
+        <button type="submit" class="btn btn-primary">Enviar</button>
+        </div>
+    </form>
+  </div>
+</div>
