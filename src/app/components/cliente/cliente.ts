@@ -70,7 +70,7 @@ export class Cliente implements OnInit {
 
   guardar() {
     if (!this.myForm.invalid) {
-      console.log(this.myForm.value);
+      
       this.confirmationService.confirm({
         message:
           `se ejecutara la sentencia sql para  Verificar si el teléfono tiene una Incidencia, Queja o Reclamación hoy: 
